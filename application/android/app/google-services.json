@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "56019761029",
+    "project_id": "trendhubbase",
+    "storage_bucket": "trendhubbase.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:56019761029:android:5736ed59b803870d2d76ec",
+        "android_client_info": {
+          "package_name": "com.example.application"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBrNX5EwQA8ffhcvgRaHAzToeDyNdqsIFM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
