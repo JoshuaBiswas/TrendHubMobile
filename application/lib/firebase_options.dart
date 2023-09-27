@@ -67,6 +67,8 @@ class DefaultFirebaseOptions {
     messagingSenderId: '56019761029',
     projectId: 'trendhubbase',
     storageBucket: 'trendhubbase.appspot.com',
+    iosClientId:
+        '56019761029-5jcf6496f4n2vkac4ef87v752hbih60j.apps.googleusercontent.com',
     iosBundleId: 'com.example.application',
   );
 
@@ -76,6 +78,8 @@ class DefaultFirebaseOptions {
     messagingSenderId: '56019761029',
     projectId: 'trendhubbase',
     storageBucket: 'trendhubbase.appspot.com',
+    iosClientId:
+        '56019761029-5jcf6496f4n2vkac4ef87v752hbih60j.apps.googleusercontent.com',
     iosBundleId: 'com.example.application',
   );
 }
