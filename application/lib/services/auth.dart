@@ -1,4 +1,5 @@
 import 'package:application/models/user.dart';
+import 'package:application/services/database.dart';
 import 'package:firebase_auth/firebase_auth.dart' as fb;
 
 class AuthService {
@@ -42,6 +43,10 @@ class AuthService {
       fb.UserCredential result = await _auth.createUserWithEmailAndPassword(
           email: email, password: password);
       fb.User? user = result.user;
+
+      await DatabaseService(uid: user!.uid)
+          .updateUserUsername(username: "blank");
+
       return _userFromFireBaseUser(user);
     } catch (e) {
       print(e.toString());

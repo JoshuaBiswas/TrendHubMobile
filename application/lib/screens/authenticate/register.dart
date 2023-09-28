@@ -1,4 +1,5 @@
 import 'package:application/services/auth.dart';
+import 'package:application/shared/constants.dart';
 import 'package:flutter/material.dart';
 
 class Register extends StatefulWidget {
@@ -14,6 +15,7 @@ class _RegisterState extends State<Register> {
 
   String email = '';
   String password = '';
+  String confirmPassword = '';
   String error = '';
 
   @override
@@ -38,20 +40,40 @@ class _RegisterState extends State<Register> {
         child: Form(
             key: _formKey,
             child: Column(children: <Widget>[
+              //Email Field
               const SizedBox(height: 20.0),
               TextFormField(
+                  decoration: textInputDecoration.copyWith(hintText: "Email"),
                   validator: (val) => val!.isEmpty ? 'Enter an email' : null,
                   onChanged: (val) {
                     setState(() => email = val);
                   }),
+
+              //Password Field
               const SizedBox(height: 20.0),
               TextFormField(
+                  decoration:
+                      textInputDecoration.copyWith(hintText: "Password"),
                   validator: (val) =>
                       val!.length < 6 ? 'Enter a password 6+ chars long' : null,
                   obscureText: true,
                   onChanged: (val) {
                     setState(() => password = val);
                   }),
+
+              //Confirm password Field
+              const SizedBox(height: 20.0),
+              TextFormField(
+                  decoration: textInputDecoration.copyWith(
+                      hintText: "Confirm Password"),
+                  validator: (val) =>
+                      val != password ? 'Please put the same password' : null,
+                  obscureText: true,
+                  onChanged: (val) {
+                    setState(() => confirmPassword = val);
+                  }),
+
+              //Register button
               const SizedBox(height: 20.0),
               ElevatedButton(
                   child: const Text(
@@ -67,6 +89,8 @@ class _RegisterState extends State<Register> {
                       } else {}
                     }
                   }),
+
+              //Error text field. Emmpty be default
               const SizedBox(height: 12.0),
               Text(
                 error,
