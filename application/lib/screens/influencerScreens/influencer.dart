@@ -1,10 +1,10 @@
 import 'package:application/services/auth.dart';
 import 'package:flutter/material.dart';
 
-class InfluencerHome extends StatelessWidget {
+class Influencer extends StatelessWidget {
   final AuthService _auth = AuthService();
 
-  InfluencerHome({super.key});
+  Influencer({super.key});
 
   @override
   Widget build(BuildContext context) {

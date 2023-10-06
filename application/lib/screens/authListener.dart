@@ -1,6 +1,6 @@
 import 'package:application/models/user.dart';
-import 'package:application/screens/brandScreens/brandHome.dart';
-import 'package:application/screens/influencerScreens/influencerHome.dart';
+import 'package:application/screens/brandScreens/brand.dart';
+import 'package:application/screens/influencerScreens/influencer.dart';
 import 'package:application/screens/landing.dart';
 import 'package:application/screens/sharedScreens/loading.dart';
 import 'package:application/services/database.dart';
@@ -29,9 +29,9 @@ class AuthListener extends StatelessWidget {
             final val = context.watch<User>();
             switch (val.type) {
               case "BRAND":
-                return BrandHome();
+                return Brand();
               case "INFLUENCER":
-                return InfluencerHome();
+                return Influencer();
               default:
                 return const Loading();
             }
