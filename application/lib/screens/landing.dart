@@ -19,7 +19,7 @@ class Landing extends StatelessWidget {
               onPressed: () async {
                 Navigator.of(context).push(
                   MaterialPageRoute(
-                    builder: (context) => Register(),
+                    builder: (context) => const Register(),
                   ),
                 );
               },
@@ -31,7 +31,7 @@ class Landing extends StatelessWidget {
               onPressed: () async {
                 Navigator.of(context).push(
                   MaterialPageRoute(
-                    builder: (context) => SignIn(),
+                    builder: (context) => const SignIn(),
                   ),
                 );
               },

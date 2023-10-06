@@ -4,6 +4,8 @@ import 'package:application/shared/constants.dart';
 import 'package:flutter/material.dart';
 
 class Register extends StatefulWidget {
+  const Register({super.key});
+
   @override
   _RegisterState createState() => _RegisterState();
 }
@@ -34,7 +36,7 @@ class _RegisterState extends State<Register> {
               onPressed: () {
                 Navigator.of(context).pushReplacement(
                   MaterialPageRoute(
-                    builder: (context) => SignIn(),
+                    builder: (context) => const SignIn(),
                   ),
                 );
               })
@@ -81,7 +83,7 @@ class _RegisterState extends State<Register> {
               //Choose between Influencer and Brand
               Row(
                 children: [
-                  Text("Influencer"),
+                  const Text("Influencer"),
                   Switch(
                     // This bool value toggles the switch.
                     value: choose,
@@ -93,7 +95,7 @@ class _RegisterState extends State<Register> {
                       });
                     },
                   ),
-                  Text("Brand"),
+                  const Text("Brand"),
                 ],
               ),
 

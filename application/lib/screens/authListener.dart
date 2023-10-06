@@ -8,6 +8,8 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 class AuthListener extends StatelessWidget {
+  const AuthListener({super.key});
+
   @override
   Widget build(BuildContext context) {
     String uid = Provider.of<String>(context);

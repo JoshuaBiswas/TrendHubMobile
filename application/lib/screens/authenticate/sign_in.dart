@@ -4,6 +4,8 @@ import 'package:application/shared/constants.dart';
 import 'package:flutter/material.dart';
 
 class SignIn extends StatefulWidget {
+  const SignIn({super.key});
+
   @override
   _SignInState createState() => _SignInState();
 }
@@ -31,7 +33,7 @@ class _SignInState extends State<SignIn> {
               onPressed: () {
                 Navigator.of(context).pushReplacement(
                   MaterialPageRoute(
-                    builder: (context) => Register(),
+                    builder: (context) => const Register(),
                   ),
                 );
               })

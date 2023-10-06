@@ -4,6 +4,8 @@ import 'package:flutter/material.dart';
 class BrandHome extends StatelessWidget {
   final AuthService _auth = AuthService();
 
+  BrandHome({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(

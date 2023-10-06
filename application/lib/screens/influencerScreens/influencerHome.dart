@@ -4,6 +4,8 @@ import 'package:flutter/material.dart';
 class InfluencerHome extends StatelessWidget {
   final AuthService _auth = AuthService();
 
+  InfluencerHome({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
