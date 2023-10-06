@@ -1,26 +1,26 @@
-import 'package:application/models/user.dart';
 import 'package:application/services/database.dart';
 import 'package:firebase_auth/firebase_auth.dart' as fb;
 
 class AuthService {
   final fb.FirebaseAuth _auth = fb.FirebaseAuth.instance;
 
+  //Return current UID
+  Future<String> getCurrentUID() async {
+    return _userFromFireBaseUser(_auth.currentUser);
+  }
+
   //create user obj based on FirebaseUser
-  User _userFromFireBaseUser(fb.User? user) {
+  String _userFromFireBaseUser(fb.User? user) {
     if (user == null) {
-      return User(uid: "");
+      return "";
     }
-    return User(uid: user.uid);
+    return user.uid;
   }
 
   //auth change user stream
-  Stream<User> get user {
+  Stream<String> get uid {
     return _auth.authStateChanges().map((fb.User? user) {
-      if (user != null) {
-        return _userFromFireBaseUser(user);
-      } else {
-        return User(uid: "");
-      }
+      return _userFromFireBaseUser(user);
     });
   }
 
@@ -38,14 +38,15 @@ class AuthService {
   }
 
   // register with email & password
-  Future registerWithEmailAndPassword(String email, String password) async {
+  Future registerWithEmailAndPassword(
+      String email, String password, String type) async {
     try {
       fb.UserCredential result = await _auth.createUserWithEmailAndPassword(
           email: email, password: password);
       fb.User? user = result.user;
 
       await DatabaseService(uid: user!.uid)
-          .updateUserUsername(username: "blank");
+          .createUserData(username: "blank", type: type);
 
       return _userFromFireBaseUser(user);
     } catch (e) {

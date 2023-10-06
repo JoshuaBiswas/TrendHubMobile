@@ -1,5 +1,4 @@
 import 'package:application/firebase_options.dart';
-import 'package:application/models/user.dart';
 import 'package:application/screens/authListener.dart';
 import 'package:application/services/auth.dart';
 import 'package:flutter/material.dart';
@@ -11,18 +10,18 @@ void main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
-  runApp(const MyApp());
+  runApp(MyApp());
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+  MyApp({super.key});
 
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return StreamProvider<User>.value(
-      initialData: User(uid: ""),
-      value: AuthService().user,
+    return StreamProvider<String>.value(
+      initialData: "",
+      value: AuthService().uid,
       child: MaterialApp(
         home: AuthListener(),
       ),

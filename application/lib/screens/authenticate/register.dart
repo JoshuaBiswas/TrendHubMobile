@@ -1,10 +1,9 @@
+import 'package:application/screens/authenticate/sign_in.dart';
 import 'package:application/services/auth.dart';
 import 'package:application/shared/constants.dart';
 import 'package:flutter/material.dart';
 
 class Register extends StatefulWidget {
-  final Function toggleView;
-  const Register({required this.toggleView});
   @override
   _RegisterState createState() => _RegisterState();
 }
@@ -17,6 +16,8 @@ class _RegisterState extends State<Register> {
   String password = '';
   String confirmPassword = '';
   String error = '';
+  //false is influencer
+  bool choose = false;
 
   @override
   Widget build(BuildContext context) {
@@ -31,7 +32,11 @@ class _RegisterState extends State<Register> {
               icon: const Icon(Icons.person),
               label: const Text("Sign In"),
               onPressed: () {
-                widget.toggleView();
+                Navigator.of(context).pushReplacement(
+                  MaterialPageRoute(
+                    builder: (context) => SignIn(),
+                  ),
+                );
               })
         ],
       ),
@@ -73,6 +78,25 @@ class _RegisterState extends State<Register> {
                     setState(() => confirmPassword = val);
                   }),
 
+              //Choose between Influencer and Brand
+              Row(
+                children: [
+                  Text("Influencer"),
+                  Switch(
+                    // This bool value toggles the switch.
+                    value: choose,
+                    activeColor: Colors.red,
+                    onChanged: (bool value) {
+                      // This is called when the user toggles the switch.
+                      setState(() {
+                        choose = value;
+                      });
+                    },
+                  ),
+                  Text("Brand"),
+                ],
+              ),
+
               //Register button
               const SizedBox(height: 20.0),
               ElevatedButton(
@@ -82,11 +106,13 @@ class _RegisterState extends State<Register> {
                   ),
                   onPressed: () async {
                     if (_formKey.currentState!.validate()) {
+                      String type = choose ? "BRAND" : "INFLUENCER";
+                      print(type);
                       dynamic result = await _auth.registerWithEmailAndPassword(
-                          email, password);
+                          email, password, type);
                       if (result == null) {
                         setState(() => error = 'please supply a valid email');
-                      } else {}
+                      }
                     }
                   }),
 
