@@ -6,6 +6,7 @@ class AuthService {
 
   //Return current UID
   Future<String> getCurrentUID() async {
+    print(_userFromFireBaseUser(_auth.currentUser));
     return _userFromFireBaseUser(_auth.currentUser);
   }
 
