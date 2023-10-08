@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-class InfluencerHome extends StatelessWidget {
-  const InfluencerHome({super.key});
+class SponsorHome extends StatelessWidget {
+  const SponsorHome({super.key});
 
   @override
   Widget build(BuildContext context) {

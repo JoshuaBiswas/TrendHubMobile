@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-class InfluencerLearn extends StatelessWidget {
-  const InfluencerLearn({super.key});
+class CreativeLearn extends StatelessWidget {
+  const CreativeLearn({super.key});
 
   @override
   Widget build(BuildContext context) {

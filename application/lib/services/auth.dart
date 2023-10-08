@@ -40,7 +40,7 @@ class AuthService {
 
   // register with email & password
   Future registerWithEmailAndPassword(
-      String email, String password, String type) async {
+      String email, String password, bool type) async {
     try {
       fb.UserCredential result = await _auth.createUserWithEmailAndPassword(
           email: email, password: password);

@@ -1,15 +1,15 @@
-import 'package:application/screens/brandScreens/brandCampaign.dart';
-import 'package:application/screens/brandScreens/brandHome.dart';
+import 'package:application/screens/sponsorScreens/sponsorCampaign.dart';
+import 'package:application/screens/sponsorScreens/sponsorHome.dart';
 import 'package:application/services/auth.dart';
 import 'package:flutter/material.dart';
 
-class Brand extends StatefulWidget {
-  Brand({super.key});
+class Sponsor extends StatefulWidget {
+  Sponsor({super.key});
   @override
-  State<Brand> createState() => _BrandState();
+  State<Sponsor> createState() => _SponsorState();
 }
 
-class _BrandState extends State<Brand> {
+class _SponsorState extends State<Sponsor> {
   final _auth = AuthService();
   int currentPageIndex = 0;
   @override
@@ -39,15 +39,15 @@ class _BrandState extends State<Brand> {
         body: <Widget>[
           Container(
             alignment: Alignment.center,
-            child: const BrandHome(),
+            child: const SponsorHome(),
           ),
           Container(
             alignment: Alignment.center,
-            child: const BrandCampaign(),
+            child: const SponsorCampaign(),
           ),
         ][currentPageIndex],
         appBar: AppBar(
-          title: const Text("Welcome to Brand Home!"),
+          title: const Text("Welcome to Sponsor Home!"),
           backgroundColor: Colors.brown[400],
           elevation: 0.0,
           actions: <Widget>[

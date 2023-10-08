@@ -1,16 +1,16 @@
-import 'package:application/screens/influencerScreens/influencerCampaign.dart';
-import 'package:application/screens/influencerScreens/influencerHome.dart';
-import 'package:application/screens/influencerScreens/influencerLearn.dart';
+import 'package:application/screens/creativeScreens/creativeCampaign.dart';
+import 'package:application/screens/creativeScreens/creativeHome.dart';
+import 'package:application/screens/creativeScreens/creativeLearn.dart';
 import 'package:application/services/auth.dart';
 import 'package:flutter/material.dart';
 
-class Influencer extends StatefulWidget {
-  Influencer({super.key});
+class Creative extends StatefulWidget {
+  Creative({super.key});
   @override
-  State<Influencer> createState() => _InfluencerState();
+  State<Creative> createState() => _CreativeState();
 }
 
-class _InfluencerState extends State<Influencer> {
+class _CreativeState extends State<Creative> {
   final _auth = AuthService();
   int currentPageIndex = 0;
   @override
@@ -38,26 +38,26 @@ class _InfluencerState extends State<Influencer> {
             NavigationDestination(
               selectedIcon: Icon(Icons.video_camera_front),
               icon: Icon(Icons.video_camera_front_outlined),
-              label: 'Influence',
+              label: 'Creative',
             )
           ],
         ),
         body: <Widget>[
           Container(
             alignment: Alignment.center,
-            child: const InfluencerLearn(),
+            child: const CreativeLearn(),
           ),
           Container(
             alignment: Alignment.center,
-            child: const InfluencerHome(),
+            child: const CreativeHome(),
           ),
           Container(
             alignment: Alignment.center,
-            child: const InfluencerCampaign(),
+            child: const CreativeCampaign(),
           ),
         ][currentPageIndex],
         appBar: AppBar(
-          title: const Text("Welcome to Influencer Home!"),
+          title: const Text("Welcome to Creative Home!"),
           backgroundColor: Colors.brown[400],
           elevation: 0.0,
           actions: <Widget>[

@@ -4,8 +4,8 @@ import 'package:application/services/database.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-class BrandCampaign extends StatelessWidget {
-  const BrandCampaign({super.key});
+class SponsorCampaign extends StatelessWidget {
+  const SponsorCampaign({super.key});
 
   @override
   Widget build(BuildContext context) {

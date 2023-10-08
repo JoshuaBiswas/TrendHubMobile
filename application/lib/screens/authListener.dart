@@ -1,6 +1,6 @@
 import 'package:application/models/user.dart';
-import 'package:application/screens/brandScreens/brand.dart';
-import 'package:application/screens/influencerScreens/influencer.dart';
+import 'package:application/screens/sponsorScreens/sponsor.dart';
+import 'package:application/screens/creativeScreens/creative.dart';
 import 'package:application/screens/landing.dart';
 import 'package:application/screens/sharedScreens/loading.dart';
 import 'package:application/services/database.dart';
@@ -13,7 +13,7 @@ class AuthListener extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     String uid = Provider.of<String>(context);
-    //return either to Brand/Influencer Home or Authenticate Widget
+    //return either to Sponsor/Creative Home or Authenticate Widget
     while (Navigator.canPop(context)) {
       Navigator.pop(context);
     }
@@ -27,13 +27,12 @@ class AuthListener extends StatelessWidget {
           initialData: User(uid: ""),
           builder: (context, child) {
             final val = context.watch<User>();
-            switch (val.type) {
-              case "BRAND":
-                return Brand();
-              case "INFLUENCER":
-                return Influencer();
-              default:
-                return const Loading();
+            if (val.uid == "") {
+              return const Loading();
+            } else if (val.type) {
+              return Sponsor();
+            } else {
+              return Creative();
             }
           });
     }

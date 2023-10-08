@@ -1,5 +1,5 @@
 class User {
   final String uid;
-  String type = "EMPTY";
+  bool type = false;
   User({required this.uid});
 }

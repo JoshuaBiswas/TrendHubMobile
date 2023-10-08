@@ -13,8 +13,7 @@ class DatabaseService {
       FirebaseFirestore.instance.collection('campaigns');
 
   //Create the user data
-  Future createUserData(
-      {required String username, required String type}) async {
+  Future createUserData({required String username, required bool type}) async {
     final data = <String, dynamic>{
       "username": username,
       "type": type,

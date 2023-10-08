@@ -18,7 +18,7 @@ class _RegisterState extends State<Register> {
   String password = '';
   String confirmPassword = '';
   String error = '';
-  //false is influencer
+  //false is creative
   bool choose = false;
 
   @override
@@ -80,10 +80,10 @@ class _RegisterState extends State<Register> {
                     setState(() => confirmPassword = val);
                   }),
 
-              //Choose between Influencer and Brand
+              //Choose between creative and sponsor
               Row(
                 children: [
-                  const Text("Influencer"),
+                  const Text("Creative"),
                   Switch(
                     // This bool value toggles the switch.
                     value: choose,
@@ -95,7 +95,7 @@ class _RegisterState extends State<Register> {
                       });
                     },
                   ),
-                  const Text("Brand"),
+                  const Text("Sponsor"),
                 ],
               ),
 
@@ -108,10 +108,8 @@ class _RegisterState extends State<Register> {
                   ),
                   onPressed: () async {
                     if (_formKey.currentState!.validate()) {
-                      String type = choose ? "BRAND" : "INFLUENCER";
-                      print(type);
                       dynamic result = await _auth.registerWithEmailAndPassword(
-                          email, password, type);
+                          email, password, choose);
                       if (result == null) {
                         setState(() => error = 'please supply a valid email');
                       }
