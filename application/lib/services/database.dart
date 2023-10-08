@@ -61,6 +61,26 @@ class DatabaseService {
     );
   }
 
+  Future<List<Campaign>> getCampaigns() async {
+    return campaignCollection.get().then(
+      (QuerySnapshot qs) {
+        List<Campaign> campaigns = [];
+        for (var docSnapshot in qs.docs) {
+          Campaign campaign = Campaign(uid: docSnapshot.id);
+          Map<String, dynamic> docData =
+              docSnapshot.data() as Map<String, dynamic>;
+          campaign.hostUID = uid;
+          campaign.description = docData["description"];
+          campaign.expiration = docData["expiration"];
+          campaign.name = docData["name"];
+          campaigns.add(campaign);
+        }
+        return campaigns;
+      },
+      onError: (e) => print("Error querying my campaigns: $e"),
+    );
+  }
+
   Future addCampaign(
       String description, String expiration, String name, String notes) async {
     final data = <String, dynamic>{
