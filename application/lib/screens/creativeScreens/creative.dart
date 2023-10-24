@@ -38,7 +38,7 @@ class _CreativeState extends State<Creative> {
             NavigationDestination(
               selectedIcon: Icon(Icons.video_camera_front),
               icon: Icon(Icons.video_camera_front_outlined),
-              label: 'Creative',
+              label: 'Create',
             )
           ],
         ),
@@ -57,7 +57,7 @@ class _CreativeState extends State<Creative> {
           ),
         ][currentPageIndex],
         appBar: AppBar(
-          title: const Text("Welcome to Creative Home!"),
+          title: const Text("Welcome Creative!"),
           backgroundColor: Colors.brown[400],
           elevation: 0.0,
           actions: <Widget>[

@@ -11,7 +11,6 @@ class CreativeCampaign extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
         body: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
-      const Text("Campaigns:"),
       Expanded(
           child: FutureProvider<List<Campaign>>(
         create: (buildContext) async {
@@ -47,6 +46,7 @@ class CreativeCampaign extends StatelessWidget {
                     );
                   },
                   child: Container(
+                      padding: const EdgeInsets.all(15),
                       height: 100,
                       color: Colors.blue.shade100,
                       child: Center(

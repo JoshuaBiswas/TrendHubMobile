@@ -47,7 +47,7 @@ class _SponsorState extends State<Sponsor> {
           ),
         ][currentPageIndex],
         appBar: AppBar(
-          title: const Text("Welcome to Sponsor Home!"),
+          title: const Text("Welcome Sponsor!"),
           backgroundColor: Colors.brown[400],
           elevation: 0.0,
           actions: <Widget>[
