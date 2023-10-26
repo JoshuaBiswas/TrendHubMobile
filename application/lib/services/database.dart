@@ -91,4 +91,25 @@ class DatabaseService {
     };
     return await campaignCollection.add(data);
   }
+
+  Future<List<Campaign>> getCreativeCampaigns() async {
+    final docRef = userCollection.doc(uid);
+    return docRef.get().then(
+      (DocumentSnapshot doc) {
+        List<dynamic> rawCampaignDynamics =
+            (doc.data() as Map<String, dynamic>)["campaigns"];
+        List<String> rawCampaigns = [];
+        for (var campaignDynamic in rawCampaignDynamics) {
+          rawCampaigns.add(campaignDynamic as String);
+        }
+        List<Campaign> campaigns = [];
+        for (var campaignUID in rawCampaigns) {
+          Campaign campaign = Campaign(uid: campaignUID);
+          campaigns.add(campaign);
+        }
+        return campaigns;
+      },
+      onError: (e) => print("Error reading user data: $e"),
+    );
+  }
 }
