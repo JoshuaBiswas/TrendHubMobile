@@ -1,4 +1,5 @@
 import 'package:application/models/campaign.dart';
+import 'package:application/models/message.dart';
 import 'package:application/models/user.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
@@ -11,6 +12,8 @@ class DatabaseService {
       FirebaseFirestore.instance.collection('users');
   final CollectionReference campaignCollection =
       FirebaseFirestore.instance.collection('campaigns');
+  final CollectionReference messageCollection =
+      FirebaseFirestore.instance.collection('messages');
 
   //Create the user data
   Future createUserData({required String username, required bool type}) async {
@@ -111,5 +114,10 @@ class DatabaseService {
       },
       onError: (e) => print("Error reading user data: $e"),
     );
+  }
+
+  Stream<List<Message>> get messages {
+    return messageCollection.snapshots().map((QuerySnapshot querySnapshot) =>
+        querySnapshot.docs.map((e) => Message()).toList());
   }
 }

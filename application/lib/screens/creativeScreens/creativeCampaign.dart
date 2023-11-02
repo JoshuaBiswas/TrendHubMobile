@@ -1,6 +1,8 @@
 import 'package:application/models/campaign.dart';
+import 'package:application/screens/creativeScreens/creativeCampaignInterface.dart';
 import 'package:application/services/auth.dart';
 import 'package:application/services/database.dart';
+import 'package:application/shared/globals.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -15,8 +17,7 @@ Widget searchWidget =
   Expanded(
       child: FutureProvider<List<Campaign>>(
     create: (buildContext) async {
-      return DatabaseService(uid: await AuthService().getCurrentUID())
-          .getCampaigns();
+      return DatabaseService(uid: Globals.currentUser.uid).getCampaigns();
     },
     initialData: const [],
     builder: ((context, child) {
@@ -61,15 +62,14 @@ Widget searchWidget =
 ]);
 
 class _CreativeCampaignState extends State<CreativeCampaign> {
-  String? campUID;
-
+  Campaign? campState;
   @override
   Widget build(BuildContext context) {
     ListTile search = ListTile(
       title: const Text('Search'),
       onTap: () {
         setState(() {
-          campUID = null;
+          campState = null;
         });
       },
     );
@@ -93,17 +93,16 @@ class _CreativeCampaignState extends State<CreativeCampaign> {
             backgroundColor: Colors.blueAccent.shade100,
             child: FutureProvider<List<ListTile>>(
                 create: (buildContext) async {
-                  print(await AuthService().getCurrentUID());
-                  List<Campaign> asCampaigns = await DatabaseService(
-                          uid: await AuthService().getCurrentUID())
-                      .getCreativeCampaigns();
+                  List<Campaign> asCampaigns =
+                      await DatabaseService(uid: Globals.currentUser.uid)
+                          .getCreativeCampaigns();
                   List<ListTile> tiles = [search];
                   for (var camp in asCampaigns) {
                     ListTile tile = ListTile(
                       title: Text(camp.uid),
                       onTap: () {
                         setState(() {
-                          campUID = camp.uid;
+                          campState = camp;
                         });
                       },
                     );
@@ -123,6 +122,8 @@ class _CreativeCampaignState extends State<CreativeCampaign> {
                     },
                   );
                 }))),
-        body: campUID == null ? searchWidget : null);
+        body: campState == null
+            ? searchWidget
+            : CreativeCampaignInterface(campState!));
   }
 }

@@ -4,6 +4,7 @@ import 'package:application/screens/creativeScreens/creative.dart';
 import 'package:application/screens/landing.dart';
 import 'package:application/screens/sharedScreens/loading.dart';
 import 'package:application/services/database.dart';
+import 'package:application/shared/globals.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -26,10 +27,10 @@ class AuthListener extends StatelessWidget {
           },
           initialData: User(uid: ""),
           builder: (context, child) {
-            final val = context.watch<User>();
-            if (val.uid == "") {
+            Globals.currentUser = context.watch<User>();
+            if (Globals.currentUser.uid == "") {
               return const Loading();
-            } else if (val.type) {
+            } else if (Globals.currentUser.type) {
               return Sponsor();
             } else {
               return Creative();
