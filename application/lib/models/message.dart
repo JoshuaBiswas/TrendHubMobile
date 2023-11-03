@@ -6,4 +6,13 @@ class Message {
   String sponsorUID = "";
   bool sponsorSent = false;
   Timestamp created = Timestamp.now();
+  Message();
+  Message.qds(QueryDocumentSnapshot qds) {
+    Map<String, dynamic> data = qds.data() as Map<String, dynamic>;
+    body = data["body"] as String;
+    creativeUID = data["creativeUID"] as String;
+    sponsorUID = data["sponsorUID"] as String;
+    sponsorSent = data["sponsorSent"] as bool;
+    created = data["created"] as Timestamp;
+  }
 }

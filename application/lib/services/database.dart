@@ -12,8 +12,8 @@ class DatabaseService {
       FirebaseFirestore.instance.collection('users');
   final CollectionReference campaignCollection =
       FirebaseFirestore.instance.collection('campaigns');
-  final CollectionReference messageCollection =
-      FirebaseFirestore.instance.collection('messages');
+  // final CollectionReference messageCollection =
+  //     FirebaseFirestore.instance.collection('messages');
 
   //Create the user data
   Future createUserData({required String username, required bool type}) async {
@@ -108,6 +108,13 @@ class DatabaseService {
         List<Campaign> campaigns = [];
         for (var campaignUID in rawCampaigns) {
           Campaign campaign = Campaign(uid: campaignUID);
+          campaignCollection
+              .doc(campaignUID)
+              .get()
+              .then((DocumentSnapshot doc) {
+            Map<String, dynamic> data = doc.data() as Map<String, dynamic>;
+            campaign.hostUID = data["host"] as String;
+          });
           campaigns.add(campaign);
         }
         return campaigns;
@@ -116,8 +123,30 @@ class DatabaseService {
     );
   }
 
-  Stream<List<Message>> get messages {
-    return messageCollection.snapshots().map((QuerySnapshot querySnapshot) =>
-        querySnapshot.docs.map((e) => Message()).toList());
+  Stream<List<Message>> getMessages(String campaignUID) {
+    return campaignCollection
+        .doc(campaignUID)
+        .collection("creatives")
+        .doc(uid)
+        .collection("messages")
+        .snapshots()
+        .map((QuerySnapshot querySnapshot) =>
+            querySnapshot.docs.map((e) => Message.qds(e)).toList());
+  }
+
+  Future sendMessage(Message message, String campaignUID) async {
+    final data = <String, dynamic>{
+      "body": message.body,
+      "creativeUID": message.creativeUID,
+      "sponsorUID": message.sponsorUID,
+      "sponsorSent": message.sponsorSent,
+      "created": message.created,
+    };
+    return await campaignCollection
+        .doc(campaignUID)
+        .collection("creatives")
+        .doc(uid)
+        .collection("messages")
+        .add(data);
   }
 }
