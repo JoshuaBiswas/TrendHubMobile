@@ -12,6 +12,7 @@ class CreativeCampaignInterface extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    var msgController = TextEditingController();
     return Scaffold(
         body: Column(
       children: [
@@ -27,7 +28,7 @@ class CreativeCampaignInterface extends StatelessWidget {
                 order: GroupedListOrder.DESC,
                 useStickyGroupSeparators: true,
                 floatingHeader: true,
-                elements: context.read<List<Message>>(),
+                elements: Message.sortByTime(context.read<List<Message>>()),
                 groupBy: (message) => DateTime(
                     message.created.toDate().year,
                     message.created.toDate().month,
@@ -40,7 +41,7 @@ class CreativeCampaignInterface extends StatelessWidget {
                       child: Padding(
                           padding: const EdgeInsets.all(8),
                           child: Text(
-                            message.created.toString(),
+                            message.created.toDate().year.toString(),
                             style: const TextStyle(color: Colors.white),
                           )),
                     ))),
@@ -49,26 +50,48 @@ class CreativeCampaignInterface extends StatelessWidget {
                         ? Alignment.centerLeft
                         : Alignment.centerRight,
                     child: Card(
+                        color: message.sponsorSent
+                            ? Colors.grey.shade200
+                            : Colors.blue.shade100,
                         elevation: 8,
                         child: Padding(
                             padding: const EdgeInsets.all(12),
                             child: Text(message.body)))),
               )),
             )),
-        TextField(
-          onSubmitted: (text) async {
-            Message m = Message();
-            m.body = text;
-            m.creativeUID = Globals.currentUser.uid;
-            m.sponsorUID = campState.hostUID;
-            await DatabaseService(uid: m.creativeUID)
-                .sendMessage(m, campState.uid);
-          },
-          decoration: const InputDecoration(
-            border: OutlineInputBorder(),
-            hintText: 'Enter message',
+        Container(
+          color: Colors.grey.shade200,
+          child: TextField(
+            controller: msgController,
+            decoration: const InputDecoration(
+              contentPadding: EdgeInsets.all(12),
+              hintText: "Type message here",
+            ),
+            onSubmitted: (text) async {
+              Message m = Message();
+              m.body = text;
+              m.creativeUID = Globals.currentUser.uid;
+              m.sponsorUID = campState.hostUID;
+              await DatabaseService(uid: m.creativeUID)
+                  .sendMessage(m, campState.uid);
+              msgController.clear();
+            },
           ),
         ),
+        // TextField(
+        //   onSubmitted: (text) async {
+        //     Message m = Message();
+        //     m.body = text;
+        //     m.creativeUID = Globals.currentUser.uid;
+        //     m.sponsorUID = campState.hostUID;
+        //     await DatabaseService(uid: m.creativeUID)
+        //         .sendMessage(m, campState.uid);
+        //   },
+        //   decoration: const InputDecoration(
+        //     border: OutlineInputBorder(),
+        //     hintText: 'Enter message',
+        //   ),
+        // ),
       ],
     ));
   }

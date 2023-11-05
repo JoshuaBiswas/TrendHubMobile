@@ -15,4 +15,11 @@ class Message {
     sponsorSent = data["sponsorSent"] as bool;
     created = data["created"] as Timestamp;
   }
+  static List<Message> sortByTime(List<Message> list) {
+    list.sort(
+      (a, b) => a.created.microsecondsSinceEpoch
+          .compareTo(b.created.microsecondsSinceEpoch),
+    );
+    return list;
+  }
 }
