@@ -103,7 +103,7 @@ class _CreativeCampaignState extends State<CreativeCampaign> {
                   List<ListTile> tiles = [search];
                   for (var camp in asCampaigns) {
                     ListTile tile = ListTile(
-                      title: Text(camp.uid),
+                      title: Text(camp.name),
                       onTap: () {
                         setState(() {
                           campState = camp;

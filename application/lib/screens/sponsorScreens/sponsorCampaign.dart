@@ -1,75 +1,81 @@
 import 'package:application/models/campaign.dart';
+import 'package:application/screens/sponsorScreens/sponsorAddCampaign.dart';
+import 'package:application/screens/sponsorScreens/sponsorCampaignInterface.dart';
+import 'package:application/services/auth.dart';
 import 'package:application/services/database.dart';
 import 'package:application/shared/globals.dart';
 import 'package:application/utils/campaignCard.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-class SponsorCampaign extends StatelessWidget {
+class SponsorCampaign extends StatefulWidget {
   const SponsorCampaign({super.key});
+  @override
+  State<SponsorCampaign> createState() => _SponsorCampaignState();
+}
 
+class _SponsorCampaignState extends State<SponsorCampaign> {
+  final _auth = AuthService();
+  Campaign? campState;
   @override
   Widget build(BuildContext context) {
+    ListTile search = ListTile(
+      title: const Text('Search'),
+      onTap: () {
+        setState(() {
+          campState = null;
+        });
+      },
+    );
     return Scaffold(
-        body: Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        const Divider(),
-        const Text("Your campaigns:"),
-        const Divider(),
-        Expanded(
-            child: StreamProvider<List<Campaign>>.value(
-          value: DatabaseService(uid: Globals.currentUser.uid).getMyCampaigns(),
-          initialData: const [],
-          builder: ((context, child) {
-            return ListView.separated(
-              padding: const EdgeInsets.all(8),
-              itemCount: context.watch<List<Campaign>>().length,
-              itemBuilder: (BuildContext context, int index) {
-                Campaign campaign = context.read<List<Campaign>>()[index];
-                return CampaignCard(campaign);
-              },
-              separatorBuilder: (BuildContext context, int index) =>
-                  const Divider(),
-            );
-          }),
-        )),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            ElevatedButton(
-                child: const Text(
-                  'Add new campaign',
-                  style: TextStyle(color: Colors.white),
-                ),
-                onPressed: () {
-                  showDialog<String>(
-                    context: context,
-                    builder: (BuildContext context) => AlertDialog(
-                      title: const Text("Add new campaign, Sponsor!"),
-                      content: const Text("Description:"),
-                      actions: <Widget>[
-                        TextButton(
-                          onPressed: () => Navigator.pop(context, 'Cancel'),
-                          child: const Text('Cancel'),
-                        ),
-                        TextButton(
-                          onPressed: () {
-                            // DatabaseService(
-                            //         uid: Globals.currentUser.uid)
-                            //     .addCampaign(Campaign(uid: meercat));
-                            Navigator.pop(context, 'Add');
-                          },
-                          child: const Text('Add'),
-                        ),
-                      ],
-                    ),
+        drawer: Drawer(
+            backgroundColor: Colors.blueAccent.shade100,
+            child: FutureProvider<List<ListTile>>(
+                create: (buildContext) async {
+                  List<Campaign> asCampaigns =
+                      await DatabaseService(uid: Globals.currentUser.uid)
+                          .getMyCampaigns();
+                  List<ListTile> tiles = [search];
+                  for (var camp in asCampaigns) {
+                    ListTile tile = ListTile(
+                      title: Text(camp.name),
+                      onTap: () {
+                        setState(() {
+                          campState = camp;
+                        });
+                      },
+                    );
+                    tiles.add(tile);
+                  }
+                  return tiles;
+                },
+                initialData: [search],
+                builder: ((context, child) {
+                  List<ListTile> campaigns = context.watch<List<ListTile>>();
+                  return ListView.separated(
+                    itemCount: campaigns.length,
+                    separatorBuilder: (context, index) => const Divider(),
+                    itemBuilder: (context, index) {
+                      return campaigns[index];
+                    },
                   );
-                }),
+                }))),
+        body: campState == null
+            ? SponsorAddCampaign()
+            : SponsorCampaignInterface(campState!),
+        appBar: AppBar(
+          title: const Text("Welcome Sponsor!"),
+          backgroundColor: Colors.brown[400],
+          elevation: 0.0,
+          actions: <Widget>[
+            TextButton.icon(
+              icon: const Icon(Icons.person),
+              label: const Text('logout'),
+              onPressed: () async {
+                await _auth.signOut();
+              },
+            )
           ],
-        ),
-        const Divider(height: 80),
-      ],
-    ));
+        ));
   }
 }

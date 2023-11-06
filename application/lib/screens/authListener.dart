@@ -25,7 +25,7 @@ class AuthListener extends StatelessWidget {
           create: (buildContext) {
             return DatabaseService(uid: uid).createUserObject();
           },
-          initialData: User(uid: ""),
+          initialData: User(uid: "", username: "", type: false),
           builder: (context, child) {
             Globals.currentUser = context.watch<User>();
             if (Globals.currentUser.uid == "") {

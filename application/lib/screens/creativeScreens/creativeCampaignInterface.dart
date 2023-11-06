@@ -78,20 +78,6 @@ class CreativeCampaignInterface extends StatelessWidget {
             },
           ),
         ),
-        // TextField(
-        //   onSubmitted: (text) async {
-        //     Message m = Message();
-        //     m.body = text;
-        //     m.creativeUID = Globals.currentUser.uid;
-        //     m.sponsorUID = campState.hostUID;
-        //     await DatabaseService(uid: m.creativeUID)
-        //         .sendMessage(m, campState.uid);
-        //   },
-        //   decoration: const InputDecoration(
-        //     border: OutlineInputBorder(),
-        //     hintText: 'Enter message',
-        //   ),
-        // ),
       ],
     ));
   }

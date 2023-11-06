@@ -38,14 +38,20 @@ class DatabaseService {
 
   Future<User> createUserObject() async {
     Map<String, dynamic> data = await readUserData();
-    User user = User(uid: uid);
-    user.type = data["type"];
-    return user;
+    return User(uid: uid, username: data["username"], type: data["type"]);
   }
 
-  Stream<List<Campaign>> getMyCampaigns() {
-    return campaignCollection.where("host", isEqualTo: uid).snapshots().map(
-        (QuerySnapshot qs) => qs.docs.map((e) => Campaign.qds(e)).toList());
+  Future<List<Campaign>> getMyCampaigns() {
+    return campaignCollection.where("host", isEqualTo: uid).get().then(
+      (QuerySnapshot qs) {
+        List<Campaign> campaigns = [];
+        for (var docSnapshot in qs.docs) {
+          campaigns.add(Campaign.qds(docSnapshot));
+        }
+        return campaigns;
+      },
+      onError: (e) => print("Error querying my campaigns: $e"),
+    );
   }
 
   Future<List<Campaign>> getCampaigns() async {
