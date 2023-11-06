@@ -43,24 +43,9 @@ class DatabaseService {
     return user;
   }
 
-  Future<List<Campaign>> getMyCampaigns() async {
-    return campaignCollection.where("host", isEqualTo: uid).get().then(
-      (QuerySnapshot qs) {
-        List<Campaign> campaigns = [];
-        for (var docSnapshot in qs.docs) {
-          Campaign campaign = Campaign(uid: docSnapshot.id);
-          Map<String, dynamic> docData =
-              docSnapshot.data() as Map<String, dynamic>;
-          campaign.hostUID = uid;
-          campaign.description = docData["description"];
-          campaign.expiration = docData["expiration"];
-          campaign.name = docData["name"];
-          campaigns.add(campaign);
-        }
-        return campaigns;
-      },
-      onError: (e) => print("Error querying my campaigns: $e"),
-    );
+  Stream<List<Campaign>> getMyCampaigns() {
+    return campaignCollection.where("host", isEqualTo: uid).snapshots().map(
+        (QuerySnapshot qs) => qs.docs.map((e) => Campaign.qds(e)).toList());
   }
 
   Future<List<Campaign>> getCampaigns() async {
@@ -68,14 +53,7 @@ class DatabaseService {
       (QuerySnapshot qs) {
         List<Campaign> campaigns = [];
         for (var docSnapshot in qs.docs) {
-          Campaign campaign = Campaign(uid: docSnapshot.id);
-          Map<String, dynamic> docData =
-              docSnapshot.data() as Map<String, dynamic>;
-          campaign.hostUID = uid;
-          campaign.description = docData["description"];
-          campaign.expiration = docData["expiration"];
-          campaign.name = docData["name"];
-          campaigns.add(campaign);
+          campaigns.add(Campaign.qds(docSnapshot));
         }
         return campaigns;
       },
@@ -83,14 +61,13 @@ class DatabaseService {
     );
   }
 
-  Future addCampaign(
-      String description, String expiration, String name, String notes) async {
+  Future addCampaign(Campaign campaign) async {
     final data = <String, dynamic>{
-      "description": description,
-      "expiration": expiration,
-      "host": uid,
-      "name": name,
-      "notes": notes,
+      "description": campaign.description,
+      "expiration": campaign.expiration,
+      "host": campaign.uid,
+      "name": campaign.name,
+      "notes": campaign.notes,
     };
     return await campaignCollection.add(data);
   }
@@ -149,4 +126,6 @@ class DatabaseService {
         .collection("messages")
         .add(data);
   }
+
+  Future addCreativeCampaign(String campaignUID) async {}
 }

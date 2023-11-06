@@ -40,7 +40,11 @@ Widget searchWidget =
                         child: const Text('Cancel'),
                       ),
                       TextButton(
-                        onPressed: () => Navigator.pop(context, 'Join'),
+                        onPressed: () {
+                          DatabaseService(uid: Globals.currentUser.uid)
+                              .addCreativeCampaign(campaign.uid);
+                          Navigator.pop(context, 'Join');
+                        },
                         child: const Text('Join'),
                       ),
                     ],

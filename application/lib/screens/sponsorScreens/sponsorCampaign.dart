@@ -1,6 +1,7 @@
 import 'package:application/models/campaign.dart';
-import 'package:application/services/auth.dart';
 import 'package:application/services/database.dart';
+import 'package:application/shared/globals.dart';
+import 'package:application/utils/campaignCard.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -17,11 +18,8 @@ class SponsorCampaign extends StatelessWidget {
         const Text("Your campaigns:"),
         const Divider(),
         Expanded(
-            child: FutureProvider<List<Campaign>>(
-          create: (buildContext) async {
-            return DatabaseService(uid: await AuthService().getCurrentUID())
-                .getMyCampaigns();
-          },
+            child: StreamProvider<List<Campaign>>.value(
+          value: DatabaseService(uid: Globals.currentUser.uid).getMyCampaigns(),
           initialData: const [],
           builder: ((context, child) {
             return ListView.separated(
@@ -29,12 +27,7 @@ class SponsorCampaign extends StatelessWidget {
               itemCount: context.watch<List<Campaign>>().length,
               itemBuilder: (BuildContext context, int index) {
                 Campaign campaign = context.read<List<Campaign>>()[index];
-                return Container(
-                    padding: const EdgeInsets.all(15),
-                    color: Colors.lightBlue.shade100,
-                    height: 180,
-                    child: Text(
-                        "${campaign.name} : ${campaign.description}\n\nExpiration: ${campaign.expiration}\nParticipating Creatives: ${index + 5}"));
+                return CampaignCard(campaign);
               },
               separatorBuilder: (BuildContext context, int index) =>
                   const Divider(),
@@ -49,9 +42,29 @@ class SponsorCampaign extends StatelessWidget {
                   'Add new campaign',
                   style: TextStyle(color: Colors.white),
                 ),
-                onPressed: () async {
-                  DatabaseService(uid: await AuthService().getCurrentUID())
-                      .addCampaign("Swweeet", "Love", "Pdeace", "Notes!");
+                onPressed: () {
+                  showDialog<String>(
+                    context: context,
+                    builder: (BuildContext context) => AlertDialog(
+                      title: const Text("Add new campaign, Sponsor!"),
+                      content: const Text("Description:"),
+                      actions: <Widget>[
+                        TextButton(
+                          onPressed: () => Navigator.pop(context, 'Cancel'),
+                          child: const Text('Cancel'),
+                        ),
+                        TextButton(
+                          onPressed: () {
+                            // DatabaseService(
+                            //         uid: Globals.currentUser.uid)
+                            //     .addCampaign(Campaign(uid: meercat));
+                            Navigator.pop(context, 'Add');
+                          },
+                          child: const Text('Add'),
+                        ),
+                      ],
+                    ),
+                  );
                 }),
           ],
         ),
