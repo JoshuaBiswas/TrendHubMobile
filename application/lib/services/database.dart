@@ -71,7 +71,7 @@ class DatabaseService {
     final data = <String, dynamic>{
       "description": campaign.description,
       "expiration": campaign.expiration,
-      "host": campaign.uid,
+      "host": campaign.hostUID,
       "name": campaign.name,
       "notes": campaign.notes,
     };
@@ -133,5 +133,20 @@ class DatabaseService {
         .add(data);
   }
 
+  //called when creative joins a campaign
   Future addCreativeCampaign(String campaignUID) async {}
+
+  Future<List<User>> getCreativesByCampaign(Campaign campaign) async {
+    return campaignCollection
+        .doc(campaign.uid)
+        .collection("creatives")
+        .get()
+        .then((QuerySnapshot qs) {
+      List<User> users = [];
+      for (var docSnapshot in qs.docs) {
+        users.add(User.qds(docSnapshot));
+      }
+      return users;
+    });
+  }
 }

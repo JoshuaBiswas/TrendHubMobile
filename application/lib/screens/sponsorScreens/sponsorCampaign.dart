@@ -4,7 +4,6 @@ import 'package:application/screens/sponsorScreens/sponsorCampaignInterface.dart
 import 'package:application/services/auth.dart';
 import 'package:application/services/database.dart';
 import 'package:application/shared/globals.dart';
-import 'package:application/utils/campaignCard.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -19,8 +18,8 @@ class _SponsorCampaignState extends State<SponsorCampaign> {
   Campaign? campState;
   @override
   Widget build(BuildContext context) {
-    ListTile search = ListTile(
-      title: const Text('Search'),
+    ListTile add = ListTile(
+      title: const Text('Add'),
       onTap: () {
         setState(() {
           campState = null;
@@ -35,7 +34,7 @@ class _SponsorCampaignState extends State<SponsorCampaign> {
                   List<Campaign> asCampaigns =
                       await DatabaseService(uid: Globals.currentUser.uid)
                           .getMyCampaigns();
-                  List<ListTile> tiles = [search];
+                  List<ListTile> tiles = [add];
                   for (var camp in asCampaigns) {
                     ListTile tile = ListTile(
                       title: Text(camp.name),
@@ -49,7 +48,7 @@ class _SponsorCampaignState extends State<SponsorCampaign> {
                   }
                   return tiles;
                 },
-                initialData: [search],
+                initialData: [add],
                 builder: ((context, child) {
                   List<ListTile> campaigns = context.watch<List<ListTile>>();
                   return ListView.separated(
