@@ -53,7 +53,9 @@ class _SponsorCampaignInterfaceState extends State<SponsorCampaignInterface> {
                   },
                 );
               }))),
-      body: userState == null ? NoCreatives() : SponsorChatInterface(),
+      body: userState == null
+          ? NoCreatives()
+          : SponsorChatInterface(widget.campState, userState!),
     );
   }
 }

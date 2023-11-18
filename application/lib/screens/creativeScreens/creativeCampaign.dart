@@ -3,6 +3,7 @@ import 'package:application/screens/creativeScreens/creativeCampaignInterface.da
 import 'package:application/services/auth.dart';
 import 'package:application/services/database.dart';
 import 'package:application/shared/globals.dart';
+import 'package:application/utils/campaignCard.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -17,7 +18,8 @@ Widget searchWidget =
   Expanded(
       child: FutureProvider<List<Campaign>>(
     create: (buildContext) async {
-      return DatabaseService(uid: Globals.currentUser.uid).getCampaigns();
+      return DatabaseService(uid: Globals.currentUser.uid)
+          .getCreativeNewCampaigns();
     },
     initialData: const [],
     builder: ((context, child) {
@@ -51,13 +53,7 @@ Widget searchWidget =
                   ),
                 );
               },
-              child: Container(
-                  padding: const EdgeInsets.all(15),
-                  height: 100,
-                  color: Colors.blue.shade100,
-                  child: Center(
-                      child:
-                          Text("${campaign.name} : ${campaign.description}"))));
+              child: Container(child: CampaignCard(campaign)));
         },
         separatorBuilder: (BuildContext context, int index) => const Divider(),
       );
@@ -79,6 +75,7 @@ class _CreativeCampaignState extends State<CreativeCampaign> {
     );
     final _auth = AuthService();
     return Scaffold(
+        backgroundColor: Colors.lightBlue.shade50,
         appBar: AppBar(
           title: const Text("Welcome Creative!"),
           backgroundColor: Colors.brown[400],

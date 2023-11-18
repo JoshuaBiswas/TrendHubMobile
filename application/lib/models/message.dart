@@ -4,6 +4,7 @@ class Message {
   String body = "";
   String creativeUID = "";
   String sponsorUID = "";
+  MessageType type = MessageType.text;
   bool sponsorSent = false;
   Timestamp created = Timestamp.now();
   Message();
@@ -23,3 +24,5 @@ class Message {
     return list;
   }
 }
+
+enum MessageType { text, payment, fulfillment }

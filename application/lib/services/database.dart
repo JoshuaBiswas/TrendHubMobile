@@ -28,7 +28,7 @@ class DatabaseService {
   //Read the user data
   Future<Map<String, dynamic>> readUserData() async {
     final docRef = userCollection.doc(uid);
-    return docRef.get().then(
+    return await docRef.get().then(
       (DocumentSnapshot doc) {
         return doc.data() as Map<String, dynamic>;
       },
@@ -55,7 +55,7 @@ class DatabaseService {
   }
 
   Future<List<Campaign>> getCampaigns() async {
-    return campaignCollection.get().then(
+    return await campaignCollection.get().then(
       (QuerySnapshot qs) {
         List<Campaign> campaigns = [];
         for (var docSnapshot in qs.docs) {
@@ -72,6 +72,7 @@ class DatabaseService {
       "description": campaign.description,
       "expiration": campaign.expiration,
       "host": campaign.hostUID,
+      "hostname": campaign.hostname,
       "name": campaign.name,
       "notes": campaign.notes,
     };
@@ -79,31 +80,22 @@ class DatabaseService {
   }
 
   Future<List<Campaign>> getCreativeCampaigns() async {
-    final docRef = userCollection.doc(uid);
-    return docRef.get().then(
-      (DocumentSnapshot doc) {
-        List<dynamic> rawCampaignDynamics =
-            (doc.data() as Map<String, dynamic>)["campaigns"];
-        List<String> rawCampaigns = [];
-        for (var campaignDynamic in rawCampaignDynamics) {
-          rawCampaigns.add(campaignDynamic as String);
-        }
-        List<Campaign> campaigns = [];
-        for (var campaignUID in rawCampaigns) {
-          Campaign campaign = Campaign(uid: campaignUID);
-          campaignCollection
-              .doc(campaignUID)
-              .get()
-              .then((DocumentSnapshot doc) {
-            Map<String, dynamic> data = doc.data() as Map<String, dynamic>;
-            campaign.hostUID = data["host"] as String;
-          });
-          campaigns.add(campaign);
-        }
-        return campaigns;
-      },
-      onError: (e) => print("Error reading user data: $e"),
-    );
+    return await userCollection
+        .doc(uid)
+        .collection("campaigns")
+        .get()
+        .then((QuerySnapshot qs) async {
+      List<Campaign> campaigns = [];
+      for (var docSnapshot in qs.docs) {
+        await campaignCollection
+            .doc(docSnapshot.id)
+            .get()
+            .then((DocumentSnapshot ds) async {
+          campaigns.add(Campaign.ds(ds));
+        });
+      }
+      return campaigns;
+    });
   }
 
   Stream<List<Message>> getMessages(String campaignUID) {
@@ -134,10 +126,21 @@ class DatabaseService {
   }
 
   //called when creative joins a campaign
-  Future addCreativeCampaign(String campaignUID) async {}
+  Future addCreativeCampaign(String campaignUID) async {
+    await campaignCollection
+        .doc(campaignUID)
+        .collection("creatives")
+        .doc(uid)
+        .set({});
+    await userCollection
+        .doc(uid)
+        .collection("campaigns")
+        .doc(campaignUID)
+        .set({});
+  }
 
   Future<List<User>> getCreativesByCampaign(Campaign campaign) async {
-    return campaignCollection
+    return await campaignCollection
         .doc(campaign.uid)
         .collection("creatives")
         .get()
@@ -148,5 +151,21 @@ class DatabaseService {
       }
       return users;
     });
+  }
+
+  Future<List<Campaign>> getCreativeNewCampaigns() async {
+    List<Campaign> campaigns = await getCampaigns();
+    List<Campaign> creativeCampaigns = await getCreativeCampaigns();
+    List<Campaign> res = [];
+    Set<String> unique = Set();
+    for (Campaign campaign in creativeCampaigns) {
+      unique.add(campaign.uid);
+    }
+    for (Campaign campaign in campaigns) {
+      if (!unique.contains(campaign.uid)) {
+        res.add(campaign);
+      }
+    }
+    return res;
   }
 }

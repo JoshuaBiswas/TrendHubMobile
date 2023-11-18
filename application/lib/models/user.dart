@@ -12,3 +12,5 @@ class User {
     type = data["type"] as bool;
   }
 }
+
+enum UserType { creative, sponsor }
