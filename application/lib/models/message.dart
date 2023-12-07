@@ -15,6 +15,11 @@ class Message {
     sponsorUID = data["sponsorUID"] as String;
     sponsorSent = data["sponsorSent"] as bool;
     created = data["created"] as Timestamp;
+    if (data["type"] == "payment") {
+      type = MessageType.payment;
+    } else if (data["type"] == "fulfillment") {
+      type = MessageType.fulfillment;
+    }
   }
   static List<Message> sortByTime(List<Message> list) {
     list.sort(

@@ -22,13 +22,22 @@ class _SponsorAddCampaignState extends State<SponsorAddCampaign> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.brown[100],
+      backgroundColor: backgroundColor,
       body: Container(
         padding: const EdgeInsets.symmetric(vertical: 20.0, horizontal: 50.0),
         child: Form(
             key: _formKey,
             child: Column(children: <Widget>[
               //Name Field
+              const SizedBox(height: 20.0),
+              const Text(
+                "Type in campaign information",
+                style: TextStyle(
+                  color: textColor,
+                  fontSize: 26,
+                ),
+                textAlign: TextAlign.center,
+              ),
               const SizedBox(height: 20.0),
               TextFormField(
                   decoration: textInputDecoration.copyWith(hintText: "Name"),
@@ -40,6 +49,7 @@ class _SponsorAddCampaignState extends State<SponsorAddCampaign> {
               //Description Field
               const SizedBox(height: 20.0),
               TextFormField(
+                  maxLines: 5,
                   decoration:
                       textInputDecoration.copyWith(hintText: "Description"),
                   validator: (val) =>
@@ -61,6 +71,7 @@ class _SponsorAddCampaignState extends State<SponsorAddCampaign> {
               //Notes Field
               const SizedBox(height: 20.0),
               TextFormField(
+                  maxLines: 5,
                   decoration: textInputDecoration.copyWith(hintText: "Notes"),
                   validator: (val) => val!.isEmpty ? 'Notes' : null,
                   onChanged: (val) {

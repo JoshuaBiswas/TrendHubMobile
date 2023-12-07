@@ -5,9 +5,9 @@ class User {
   String username = "";
   bool type = false;
   User({required this.uid, required this.username, required this.type});
-  User.qds(QueryDocumentSnapshot qds) {
-    Map<String, dynamic> data = qds.data() as Map<String, dynamic>;
-    uid = qds.id;
+  User.ds(DocumentSnapshot ds) {
+    Map<String, dynamic> data = ds.data() as Map<String, dynamic>;
+    uid = ds.id;
     username = data["username"] as String;
     type = data["type"] as bool;
   }

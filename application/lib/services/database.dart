@@ -116,9 +116,27 @@ class DatabaseService {
       "sponsorUID": message.sponsorUID,
       "sponsorSent": message.sponsorSent,
       "created": message.created,
+      "type": "text",
     };
     return await campaignCollection
         .doc(campaignUID)
+        .collection("creatives")
+        .doc(uid)
+        .collection("messages")
+        .add(data);
+  }
+
+  Future sendPaymentMessage(Campaign campState, User userState) async {
+    final data = <String, dynamic>{
+      "body": "Sponsor has just paid Creative for their service",
+      "creativeUID": userState.uid,
+      "sponsorUID": campState.hostUID,
+      "sponsorSent": true,
+      "created": Timestamp.now(),
+      "type": "payment",
+    };
+    return await campaignCollection
+        .doc(campState.uid)
         .collection("creatives")
         .doc(uid)
         .collection("messages")
@@ -144,10 +162,10 @@ class DatabaseService {
         .doc(campaign.uid)
         .collection("creatives")
         .get()
-        .then((QuerySnapshot qs) {
+        .then((QuerySnapshot qs) async {
       List<User> users = [];
       for (var docSnapshot in qs.docs) {
-        users.add(User.qds(docSnapshot));
+        users.add(User.ds(await userCollection.doc(docSnapshot.id).get()));
       }
       return users;
     });

@@ -3,13 +3,15 @@ import 'package:application/models/user.dart';
 import 'package:application/screens/sponsorScreens/noCreatives.dart';
 import 'package:application/screens/sponsorScreens/sponsorChatInterface.dart';
 import 'package:application/services/database.dart';
+import 'package:application/shared/constants.dart';
 import 'package:application/shared/globals.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 class SponsorCampaignInterface extends StatefulWidget {
   final Campaign campState;
-  const SponsorCampaignInterface(this.campState, {super.key});
+  User? userState;
+  SponsorCampaignInterface(this.campState, {super.key});
 
   @override
   State<SponsorCampaignInterface> createState() =>
@@ -17,7 +19,6 @@ class SponsorCampaignInterface extends StatefulWidget {
 }
 
 class _SponsorCampaignInterfaceState extends State<SponsorCampaignInterface> {
-  User? userState;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -31,11 +32,16 @@ class _SponsorCampaignInterfaceState extends State<SponsorCampaignInterface> {
                 List<ListTile> tiles = [];
                 for (var user in asUsers) {
                   ListTile tile = ListTile(
+                    textColor: widget.userState != null &&
+                            user.uid == widget.userState!.uid
+                        ? selectedTextColor
+                        : textColor,
                     title: Text(user.username),
                     onTap: () {
                       setState(() {
-                        userState = user;
+                        widget.userState = user;
                       });
+                      Navigator.of(context).pop();
                     },
                   );
                   tiles.add(tile);
@@ -45,6 +51,17 @@ class _SponsorCampaignInterfaceState extends State<SponsorCampaignInterface> {
               initialData: [],
               builder: ((context, child) {
                 List<ListTile> users = context.watch<List<ListTile>>();
+                if (users.isEmpty) {
+                  return const Center(
+                      child: Text(
+                    "No creatives currently in campaign",
+                    style: TextStyle(
+                      color: textColor,
+                      fontSize: 36,
+                    ),
+                    textAlign: TextAlign.center,
+                  ));
+                }
                 return ListView.separated(
                   itemCount: users.length,
                   separatorBuilder: (context, index) => const Divider(),
@@ -53,9 +70,9 @@ class _SponsorCampaignInterfaceState extends State<SponsorCampaignInterface> {
                   },
                 );
               }))),
-      body: userState == null
+      body: widget.userState == null
           ? NoCreatives()
-          : SponsorChatInterface(widget.campState, userState!),
+          : SponsorChatInterface(widget.campState, widget.userState!),
     );
   }
 }

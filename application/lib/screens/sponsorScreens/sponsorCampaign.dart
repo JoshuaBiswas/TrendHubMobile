@@ -3,6 +3,7 @@ import 'package:application/screens/sponsorScreens/sponsorAddCampaign.dart';
 import 'package:application/screens/sponsorScreens/sponsorCampaignInterface.dart';
 import 'package:application/services/auth.dart';
 import 'package:application/services/database.dart';
+import 'package:application/shared/constants.dart';
 import 'package:application/shared/globals.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -19,16 +20,18 @@ class _SponsorCampaignState extends State<SponsorCampaign> {
   @override
   Widget build(BuildContext context) {
     ListTile add = ListTile(
-      title: const Text('Add'),
+      textColor: campState == null ? selectedTextColor : textColor,
+      title: const Text('Add', style: TextStyle(fontSize: 20)),
       onTap: () {
         setState(() {
           campState = null;
         });
+        Navigator.of(context).pop();
       },
     );
     return Scaffold(
         drawer: Drawer(
-            backgroundColor: Colors.blueAccent.shade100,
+            backgroundColor: drawerColor,
             child: FutureProvider<List<ListTile>>(
                 create: (buildContext) async {
                   List<Campaign> asCampaigns =
@@ -37,11 +40,16 @@ class _SponsorCampaignState extends State<SponsorCampaign> {
                   List<ListTile> tiles = [add];
                   for (var camp in asCampaigns) {
                     ListTile tile = ListTile(
+                      textColor:
+                          (campState != null) && campState!.name == camp.name
+                              ? selectedTextColor
+                              : textColor,
                       title: Text(camp.name),
                       onTap: () {
                         setState(() {
                           campState = camp;
                         });
+                        Navigator.of(context).pop();
                       },
                     );
                     tiles.add(tile);
@@ -64,7 +72,7 @@ class _SponsorCampaignState extends State<SponsorCampaign> {
             : SponsorCampaignInterface(campState!),
         appBar: AppBar(
           title: const Text("Welcome Sponsor!"),
-          backgroundColor: Colors.brown[400],
+          backgroundColor: headerColor,
           elevation: 0.0,
           actions: <Widget>[
             TextButton.icon(

@@ -1,5 +1,6 @@
 import 'package:application/screens/sponsorScreens/sponsorCampaign.dart';
 import 'package:application/screens/sponsorScreens/sponsorHome.dart';
+import 'package:application/shared/constants.dart';
 import 'package:flutter/material.dart';
 
 class Sponsor extends StatefulWidget {
@@ -15,6 +16,7 @@ class _SponsorState extends State<Sponsor> {
     return Scaffold(
       backgroundColor: Colors.brown[50],
       bottomNavigationBar: NavigationBar(
+        backgroundColor: footerColor,
         onDestinationSelected: (int index) {
           setState(() {
             currentPageIndex = index;
