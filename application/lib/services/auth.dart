@@ -40,14 +40,14 @@ class AuthService {
 
   // register with email & password
   Future registerWithEmailAndPassword(
-      String email, String password, bool type) async {
+      String email, String username, String password, bool type) async {
     try {
       fb.UserCredential result = await _auth.createUserWithEmailAndPassword(
           email: email, password: password);
       fb.User? user = result.user;
 
       await DatabaseService(uid: user!.uid)
-          .createUserData(username: "blank", type: type);
+          .createUserData(username: username, type: type);
 
       return _userFromFireBaseUser(user);
     } catch (e) {

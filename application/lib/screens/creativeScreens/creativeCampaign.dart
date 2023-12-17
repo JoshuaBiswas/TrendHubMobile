@@ -2,6 +2,7 @@ import 'package:application/models/campaign.dart';
 import 'package:application/screens/creativeScreens/creativeCampaignInterface.dart';
 import 'package:application/services/auth.dart';
 import 'package:application/services/database.dart';
+import 'package:application/shared/constants.dart';
 import 'package:application/shared/globals.dart';
 import 'package:application/utils/campaignCard.dart';
 import 'package:flutter/material.dart';
@@ -66,19 +67,21 @@ class _CreativeCampaignState extends State<CreativeCampaign> {
   @override
   Widget build(BuildContext context) {
     ListTile search = ListTile(
-      title: const Text('Search'),
+      textColor: campState == null ? selectedTextColor : textColor,
+      title: const Text('Search', style: TextStyle(fontSize: 20)),
       onTap: () {
         setState(() {
           campState = null;
         });
+        Navigator.of(context).pop();
       },
     );
     final _auth = AuthService();
     return Scaffold(
-        backgroundColor: Colors.lightBlue.shade50,
+        backgroundColor: backgroundColor,
         appBar: AppBar(
           title: const Text("Welcome Creative!"),
-          backgroundColor: Colors.brown[400],
+          backgroundColor: headerColor,
           elevation: 0.0,
           actions: <Widget>[
             TextButton.icon(
@@ -91,7 +94,7 @@ class _CreativeCampaignState extends State<CreativeCampaign> {
           ],
         ),
         drawer: Drawer(
-            backgroundColor: Colors.blueAccent.shade100,
+            backgroundColor: drawerColor,
             child: FutureProvider<List<ListTile>>(
                 create: (buildContext) async {
                   List<Campaign> asCampaigns =
@@ -100,11 +103,16 @@ class _CreativeCampaignState extends State<CreativeCampaign> {
                   List<ListTile> tiles = [search];
                   for (var camp in asCampaigns) {
                     ListTile tile = ListTile(
+                      textColor:
+                          (campState != null) && campState!.name == camp.name
+                              ? selectedTextColor
+                              : textColor,
                       title: Text(camp.name),
                       onTap: () {
                         setState(() {
                           campState = camp;
                         });
+                        Navigator.of(context).pop();
                       },
                     );
                     tiles.add(tile);

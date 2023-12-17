@@ -1,6 +1,7 @@
 import 'package:application/screens/creativeScreens/creativeCampaign.dart';
 import 'package:application/screens/creativeScreens/creativeHome.dart';
 import 'package:application/screens/creativeScreens/creativeLearn.dart';
+import 'package:application/shared/constants.dart';
 import 'package:flutter/material.dart';
 
 class Creative extends StatefulWidget {
@@ -14,8 +15,9 @@ class _CreativeState extends State<Creative> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.brown[50],
+      backgroundColor: backgroundColor,
       bottomNavigationBar: NavigationBar(
+        backgroundColor: footerColor,
         onDestinationSelected: (int index) {
           setState(() {
             currentPageIndex = index;

@@ -1,6 +1,7 @@
 import 'package:application/models/campaign.dart';
 import 'package:application/models/message.dart';
 import 'package:application/models/user.dart';
+import 'package:application/shared/globals.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class DatabaseService {
@@ -143,6 +144,24 @@ class DatabaseService {
         .add(data);
   }
 
+  Future sendFulfillmenttMessage(Campaign campState) async {
+    final data = <String, dynamic>{
+      "body":
+          "Creative has just fulfilled the campaign objective. Here is a link to the video so the sponsor can see. https://www.youtube.com/watch?v=dQw4w9WgXcQ",
+      "creativeUID": Globals.currentUser.uid,
+      "sponsorUID": campState.hostUID,
+      "sponsorSent": false,
+      "created": Timestamp.now(),
+      "type": "fulfillment",
+    };
+    return await campaignCollection
+        .doc(campState.uid)
+        .collection("creatives")
+        .doc(uid)
+        .collection("messages")
+        .add(data);
+  }
+
   //called when creative joins a campaign
   Future addCreativeCampaign(String campaignUID) async {
     await campaignCollection
@@ -175,7 +194,7 @@ class DatabaseService {
     List<Campaign> campaigns = await getCampaigns();
     List<Campaign> creativeCampaigns = await getCreativeCampaigns();
     List<Campaign> res = [];
-    Set<String> unique = Set();
+    Set<String> unique = {};
     for (Campaign campaign in creativeCampaigns) {
       unique.add(campaign.uid);
     }
